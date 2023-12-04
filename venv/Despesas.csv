@@ -1,3 +1,5 @@
 ID,DESPESA,VALOR,STATUS
-1,Educação,100000,Pago
-2,Lazer,200,A pagar
+1,Lazer,200,A pagar
+2,Educação,150,A pagar
+3,Moradia,1200,A pagar
+4,Educação,19.9,A pagar

@@ -12,30 +12,51 @@ axios.get('http://127.0.0.1:5000/list').then(function (resposta) {
 
 
 function getData(dados) {
-    dados.map((item) => {
+    const categorias = {};
+  
+    dados.forEach((item) => {
         tabela.innerHTML += `
-      <tr>
-        <th scope="row">${item.STATUS}</th>
-        <td>${item.DESPESA}</td>
-        <td>${item.VALOR}</td>
-        <td>
-        
-        
-        <button class="btn"><span class="material-symbols-outlined text-success" onclick="alterarStatus(${item.ID})">
-            check
-        </span></button>
-        
-        <button class="btn"><span class="material-symbols-outlined text-danger" onclick="excluirDespesa(${item.ID})">
-            delete
-        </span></button>
+          <tr>
+            <th scope="row">${item.STATUS}</th>
+            <td>${item.DESPESA}</td>
+            <td>${item.VALOR}</td>
+            <td>
+              <button class="btn"><span class="material-symbols-outlined text-success" onclick="alterarStatus(${item.ID})">check</span></button>
+              <button class="btn"><span class="material-symbols-outlined text-danger" onclick="excluirDespesa(${item.ID})">delete</span></button>
+              <button class="btn"><span class="material-symbols-outlined text-success" onclick="atualizarDespesa('${item.DESPESA}', ${item.VALOR})">edit</span></button>
+            </td>
+          </tr>
+      `;
 
-        <button class="btn"><span class="material-symbols-outlined text-success" onclick="atualizarDespesa('${item.DESPESA}', ${item.VALOR})">
-            edit
-        </span></button>
-        </td>
-      </tr>
-      `
-    })
+        // Calcula o total gasto em cada categoria
+        if (categorias[item.DESPESA]) {
+            categorias[item.DESPESA] += item.VALOR;
+        } else {
+            categorias[item.DESPESA] = item.VALOR;
+        }
+    });
+
+    // Exiba o total gasto por categoria
+    displayTotalPorCategoria(categorias);
+}
+
+function displayTotalPorCategoria(categorias) {
+    // Limpe o conteúdo existente
+    const totalPorCategoriaContainer = document.getElementById('totalPorCategoria');
+    totalPorCategoriaContainer.innerHTML = '';
+
+    // Crie uma lista para exibir o total por categoria
+    const listaTotalPorCategoria = document.createElement('ul');
+
+    // Adicione cada categoria e seu total à lista
+    for (const categoria in categorias) {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${categoria}: R$ ${categorias[categoria].toFixed(2)}`;
+        listaTotalPorCategoria.appendChild(listItem);
+    }
+
+    // Adicione a lista ao contêiner
+    totalPorCategoriaContainer.appendChild(listaTotalPorCategoria);
 }
 
 
@@ -116,14 +137,3 @@ function alterarStatus(tarefaId) {
             });
     }
 }
-
-// Função para recarregar as tarefas
-function carregarDespesas() {
-axios.get(`http://127.0.0.1:5000/list`)
-    .then(function (resposta) {
-        getData(resposta.data);
-    })
-    .catch(function (error) {
-        console.error(error);
-    });
-  }
