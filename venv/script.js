@@ -35,7 +35,7 @@ function getData(dados) {
             } else {
                 categorias[item.DESPESA] = item.VALOR;
             }
-        }
+    }
     
     });
 
