@@ -28,12 +28,15 @@ function getData(dados) {
           </tr>
       `;
 
+        if (item.STATUS === 'A pagar') {
         // Calcula o total gasto em cada categoria
-        if (categorias[item.DESPESA]) {
-            categorias[item.DESPESA] += item.VALOR;
-        } else {
-            categorias[item.DESPESA] = item.VALOR;
+            if (categorias[item.DESPESA]) {
+                categorias[item.DESPESA] += item.VALOR;
+            } else {
+                categorias[item.DESPESA] = item.VALOR;
+            }
         }
+    
     });
 
     // Exiba o total gasto por categoria
